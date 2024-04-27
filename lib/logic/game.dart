@@ -12,16 +12,19 @@ class Game {
   // - Game
   bool gameOver = false;
   game(index) {
-    turnCounter++;
-    if (this.board[index].length == 0) {
-      this.board[index] = currentPlayer ? playerO : playerX;
-      this.turn();
-    }
-    if (turnCounter == 9 && winner == '') {
-      isTie = true;
-      playerO = './assets/skuli.png';
-      playerX = './assets/skuli.png';
-      winner = './assets/skuli.png';
+    if (!gameOver) {
+      turnCounter++;
+      if (this.board[index].isEmpty) {
+        this.board[index] = currentPlayer ? playerO : playerX;
+        this.turn();
+        isWinner();
+        if (turnCounter == 9 && winner == '') {
+          isTie = true;
+          playerO = './assets/skuli.png';
+          playerX = './assets/skuli.png';
+          winner = './assets/skuli.png';
+        }
+      }
     }
   }
 
