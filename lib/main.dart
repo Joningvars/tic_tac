@@ -151,6 +151,7 @@ class _GameScreen extends State<MyHomePage> {
                 game.turnCounter = 0;
                 game.currentPlayer = true;
                 game.isTie = false;
+                game.currentPlayerIcon = Game.playerO;
               });
             },
             icon: const Icon(Icons.replay),
