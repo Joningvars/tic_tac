@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'ui/colors.dart';
 import 'logic/game.dart';
 
@@ -34,57 +35,61 @@ class MyHomePage extends StatefulWidget {
 class _GameScreen extends State<MyHomePage> {
   Game game = Game();
 
+  void initState() {
+    super.initState();
+    //TODO - inititalize game board
+    print('game');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MainColor.background,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            game.isWinner()
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      !game.isTie
-                          ? Row(
-                              children: [
-                                SizedBox(
-                                  width: 100,
-                                  child: Image.asset(game.currentPlayer
-                                      ? game.playerO
-                                      : game.playerX),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          game.isWinner()
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    !game.isTie
+                        ? Row(
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                child: Image.asset(game.currentPlayerIcon),
+                              ),
+                              Text(
+                                game.currentPlayer ? "'s turn" : "'s turn",
+                                style: const TextStyle(
+                                  fontSize: 28,
                                 ),
-                                Text(
-                                  game.currentPlayer ? "'s turn" : "'s turn",
-                                  style: const TextStyle(
-                                    fontSize: 28,
-                                  ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              SizedBox(
+                                width: 140,
+                                child: Image.asset('./assets/skuli.png'),
+                              ),
+                              Text(
+                                'Common strákar, smá standard!🤡',
+                                style: const TextStyle(
+                                  fontSize: 23,
                                 ),
-                              ],
-                            )
-                          : Column(
-                              children: [
-                                SizedBox(
-                                  width: 140,
-                                  child: Image.asset('./assets/skuli.png'),
-                                ),
-                                Text(
-                                  'Common strákar, smá standard!🤡',
-                                  style: const TextStyle(
-                                    fontSize: 23,
-                                  ),
-                                ),
-                              ],
-                            )
-                    ],
-                  )
-                : SizedBox(
+                              ),
+                            ],
+                          )
+                  ],
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(top: 70.0),
+                  child: SizedBox(
                     child: Column(
                       children: [
                         SizedBox(
                           width: 150,
-                          child: Image.asset('${game.winner}'),
+                          child: Image.asset('${game.currentPlayerIcon}'),
                         ),
                         Center(
                           child: Text(
@@ -99,62 +104,59 @@ class _GameScreen extends State<MyHomePage> {
                       ],
                     ),
                   ),
-            SizedBox(
-              width: 400, //TODO - setja í breytu
-              height: 500, //TODO - setja í breytu
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
                 ),
-                itemCount: 9,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: MainColor.white,
-                        ),
-                        width: 200,
-                        height: 200,
-                        child: Center(
-                          child: game.board[index].isEmpty
-                              ? const Text('')
-                              : Image.asset(
-                                  game.board[index],
-                                ),
-                        ),
+          SizedBox(
+            width: 400, //TODO - setja í breytu
+            height: 500, //TODO - setja í breytu
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3),
+              itemCount: 9,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: MainColor.white,
                       ),
-                      onTap: () {
-                        setState(() {
-                          game.game(index);
-                        });
-                      },
+                      width: 200,
+                      height: 200,
+                      child: Center(
+                        child: game.board[index].isEmpty
+                            ? const Text('')
+                            : Image.asset(
+                                game.board[index],
+                              ),
+                      ),
                     ),
-                  );
-                },
-              ),
-            ),
-            ElevatedButton.icon(
-              onPressed: () {
-                setState(() {
-                  game.board = ['', '', '', '', '', '', '', '', ''];
-                  game.currentPlayer = true;
-                  game.gameOver = false;
-                  game.playerO = './assets/gunni.png';
-                  game.playerX = './assets/hjalti.png';
-                  game.winner = '';
-                  game.turnCounter = 0;
-                  game.currentPlayer = true;
-                  game.isTie = false;
-                });
+                    onTap: () {
+                      setState(() {
+                        game.game(index);
+                      });
+                    },
+                  ),
+                );
               },
-              icon: const Icon(Icons.replay),
-              label: const Text('Restart'),
-            )
-          ],
-        ),
+            ),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              setState(() {
+                game.board = ['', '', '', '', '', '', '', '', ''];
+                game.currentPlayer = true;
+                game.gameOver = false;
+                game.winner = '';
+                game.turnCounter = 0;
+                game.currentPlayer = true;
+                game.isTie = false;
+              });
+            },
+            icon: const Icon(Icons.replay),
+            label: const Text('Restart'),
+          )
+        ]),
       ),
     );
   }
