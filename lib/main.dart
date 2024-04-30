@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
+
 import 'package:tic_tac_toe/chat_bubble.dart';
 import 'ui/colors.dart';
 import 'logic/game.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,13 +20,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const MyHomePage(title: 'Tic Tac Toe'),
+      home: MyHomePage(title: 'Tic Tac Toe'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -142,10 +142,10 @@ class _GameScreen extends State<MyHomePage> {
                         ),
                         onTap: () {
                           setState(() {
-                            game.game(index);
                             if (!game.gameOver) {
                               SystemSound.play(SystemSoundType.click);
                             }
+                            game.game(index);
                           });
                         },
                       ),
@@ -165,7 +165,7 @@ class _GameScreen extends State<MyHomePage> {
                     ),
                   ),
                   Visibility(
-                    visible: game.gameOver,
+                    visible: game.gameOver || game.isTie,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,

@@ -64,6 +64,9 @@ flutter:
     - assets/hjalti.png
     - assets/skuli.png
     - assets/ntv.png
+    - assets/sounds/
+
+
 
   #   - images/a_dot_ham.jpeg
 
