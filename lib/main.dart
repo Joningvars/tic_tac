@@ -130,7 +130,7 @@ class _GameScreen extends State<MyHomePage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: isSelected[index]
-                                ? Colors.green
+                                ? Colors.grey.shade900
                                 : Colors.grey.shade400,
                           ),
                           width: 100,
