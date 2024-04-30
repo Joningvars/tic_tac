@@ -36,6 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 class _GameScreen extends State<MyHomePage> {
   Game game = Game();
+  List<bool> isSelected = List.generate(9, (index) => false);
 
   void initState() {
     super.initState();
@@ -48,7 +49,7 @@ class _GameScreen extends State<MyHomePage> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(gradient: MainColor.backgroundGradient),
-        padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust padding
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +101,7 @@ class _GameScreen extends State<MyHomePage> {
                             SizedBox(
                               width: 100,
                               child: Image.asset('${game.currentPlayerIcon}'),
-                            ), // Adjust spacing
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 50.0),
                               child: ChatBubble(
@@ -123,12 +124,14 @@ class _GameScreen extends State<MyHomePage> {
                   itemCount: 9,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.all(4.0), // Adjust padding
+                      padding: const EdgeInsets.all(4.0),
                       child: GestureDetector(
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey.shade400,
+                            color: isSelected[index]
+                                ? Colors.green
+                                : Colors.grey.shade400,
                           ),
                           width: 100,
                           height: 100,
@@ -142,10 +145,13 @@ class _GameScreen extends State<MyHomePage> {
                         ),
                         onTap: () {
                           setState(() {
-                            if (!game.gameOver) {
+                            if (!game.gameOver &&
+                                !game.isTie &&
+                                !isSelected[index]) {
                               SystemSound.play(SystemSoundType.click);
+                              game.game(index);
+                              isSelected[index] = true;
                             }
-                            game.game(index);
                           });
                         },
                       ),
@@ -182,6 +188,7 @@ class _GameScreen extends State<MyHomePage> {
                           game.currentPlayer = true;
                           game.isTie = false;
                           game.currentPlayerIcon = Game.playerO;
+                          isSelected = List.generate(9, (index) => false);
                         });
                       },
                       icon: const Padding(
